@@ -68,7 +68,7 @@ module Jekyll
 
     def render_tilt_in_context(ext, content, params={})
       context = ClosedStruct.new(params)
-      Tilt[ext].new{content}.render(context)
+      Tilt[ext].new{content}.render(context) if Tilt[ext]
     end
 
     # Add any necessary layouts to this convertible document.
@@ -102,23 +102,20 @@ module Jekyll
       while layout
         payload = payload.deep_merge({"content" => self.output, "page" => layout.data})
 
-        # Switch between Tilt and Liquid rendering
-        if layout.ext == '.html'
-          begin
-            self.output = Liquid::Template.parse(layout.content).render(payload, info)
-          rescue => e
-            puts "Liquid Exception: #{e.message} in #{self.data["layout"]}"
-          end
-        else
-          begin
-            self.output = render_tilt_in_context(layout.ext, layout.content,
-              :site => ClosedStruct.new(payload["site"]),
-              :page => ClosedStruct.new(payload["page"]),
-              :content => payload["content"]
-            )
-          rescue => e
-            puts "Tilt Exception processing #{layout.name}#{layout.ext}: #{e.message} in #{self.data["layout"]}"
-          end
+        begin
+          self.output = Liquid::Template.parse(layout.content).render(payload, info)
+        rescue => e
+          puts "Liquid Exception: #{e.message} in #{self.data["layout"]}"
+        end
+
+        begin
+          self.output = render_tilt_in_context(layout.ext, layout.content,
+            :site => ClosedStruct.new(payload["site"]),
+            :page => ClosedStruct.new(payload["page"]),
+            :content => payload["content"]
+          )
+        rescue => e
+          puts "Tilt Exception: #{e.message} in #{self.data["layout"]}"
         end
 
 
