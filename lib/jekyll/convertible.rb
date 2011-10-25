@@ -72,6 +72,7 @@ module Jekyll
     # Returns transformed content.
     def render_tilt_in_context(ext, content, params={})
       context = ClosedStruct.new(params)
+      context.extend(TiltHelpers)
       Tilt[ext].new{content}.render(context) if Tilt[ext]
     end
 

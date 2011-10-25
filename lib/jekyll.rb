@@ -34,6 +34,7 @@ require 'jekyll/layout'
 require 'jekyll/page'
 require 'jekyll/post'
 require 'jekyll/filters'
+require 'jekyll/tilt_helpers'
 require 'jekyll/static_file'
 require 'jekyll/errors'
 
