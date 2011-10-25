@@ -2,7 +2,7 @@ h1. Jekyll Fork
 
 By James A. Overton
 
-This is a fork of "Jekyll":http://wiki.github.com/mojombo/jekyll that allows you to use any templating system supported by "Tilt":https://github.com/rtomayko/tilt for your layouts. 
+This is a fork of "Jekyll":https://github.com/mojombo/jekyll that allows you to use any templating system supported by "Tilt":https://github.com/rtomayko/tilt for your layouts. 
 
 I especially like "Slim":http://slim-lang.com. For example, you can have @_layouts/default.slim@:
 
@@ -43,7 +43,7 @@ By Tom Preston-Werner, Nick Quaranto, and many awesome contributors!
 
 Jekyll is a simple, blog aware, static site generator. It takes a template directory (representing the raw form of a website), runs it through Textile or Markdown and Liquid converters, and spits out a complete, static website suitable for serving with Apache or your favorite web server. This is also the engine behind "GitHub Pages":http://pages.github.com, which you can use to host your project's page or blog right here from GitHub.
 
-See "http://wiki.github.com/mojombo/jekyll":http://wiki.github.com/mojombo/jekyll for information about installing and configuring Jekyll.
+See "https://github.com/mojombo/jekyll":https://github.com/mojombo/jekyll for information about installing and configuring Jekyll.
 
 
 h2. Runtime Dependencies
