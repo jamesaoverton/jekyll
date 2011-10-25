@@ -4,7 +4,7 @@ By James A. Overton
 
 This is a fork of "Jekyll":https://github.com/mojombo/jekyll that allows you to use any templating system supported by "Tilt":https://github.com/rtomayko/tilt for your layouts. 
 
-I especially like "Slim":http://slim-lang.com. For example, you can have @_layouts/default.slim@:
+I especially like "Slim":http://slim-lang.com. Add the "slim_converter.rb":https://gist.github.com/1314003 to your @_plugins@ and then you can have @_layouts/default.slim@:
 
 <pre>
 ---
