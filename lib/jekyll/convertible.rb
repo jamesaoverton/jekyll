@@ -1,8 +1,5 @@
 require 'set'
-
 require 'tilt'
-require 'slim'
-Slim::Engine.set_default_options :pretty => true
 
 # Convertible provides methods for converting a pagelike item
 # from a certain type of markup into actual content
@@ -66,6 +63,13 @@ module Jekyll
       @converter ||= self.site.converters.find { |c| c.matches(self.ext) }
     end
 
+    # Transform the content using Tilt
+    #
+    # ext - The file extension, used to find the right templating engine.
+    # content - The content of the template.
+    # params - A hash of values to use for the context.
+    #
+    # Returns transformed content.
     def render_tilt_in_context(ext, content, params={})
       context = ClosedStruct.new(params)
       Tilt[ext].new{content}.render(context) if Tilt[ext]
