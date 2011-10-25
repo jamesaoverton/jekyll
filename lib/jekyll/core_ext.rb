@@ -50,3 +50,13 @@ class Date
     strftime("%Y-%m-%dT%H:%M:%S%Z")
   end if RUBY_VERSION < '1.9'
 end
+
+# Create a data object with accessor methods. 
+# Unlike OpenStruct, calling a missing method will raise a NoMethodError.
+# Following the henrik/jekyll fork.
+require 'ostruct'
+class ClosedStruct < OpenStruct
+  def method_missing(symbol, *args)
+    raise(NoMethodError, "undefined method `#{symbol}' for #{self}")
+  end
+end

@@ -1,5 +1,9 @@
 require 'set'
 
+require 'tilt'
+require 'slim'
+Slim::Engine.set_default_options :pretty => true
+
 # Convertible provides methods for converting a pagelike item
 # from a certain type of markup into actual content
 #
@@ -62,6 +66,11 @@ module Jekyll
       @converter ||= self.site.converters.find { |c| c.matches(self.ext) }
     end
 
+    def render_tilt_in_context(ext, content, params={})
+      context = ClosedStruct.new(params)
+      Tilt[ext].new{content}.render(context)
+    end
+
     # Add any necessary layouts to this convertible document.
     #
     # payload - The site payload Hash.
@@ -93,11 +102,25 @@ module Jekyll
       while layout
         payload = payload.deep_merge({"content" => self.output, "page" => layout.data})
 
-        begin
-          self.output = Liquid::Template.parse(layout.content).render(payload, info)
-        rescue => e
-          puts "Liquid Exception: #{e.message} in #{self.data["layout"]}"
+        # Switch between Tilt and Liquid rendering
+        if layout.ext == '.html'
+          begin
+            self.output = Liquid::Template.parse(layout.content).render(payload, info)
+          rescue => e
+            puts "Liquid Exception: #{e.message} in #{self.data["layout"]}"
+          end
+        else
+          begin
+            self.output = render_tilt_in_context(layout.ext, layout.content,
+              :site => ClosedStruct.new(payload["site"]),
+              :page => ClosedStruct.new(payload["page"]),
+              :content => payload["content"]
+            )
+          rescue => e
+            puts "Tilt Exception processing #{layout.name}#{layout.ext}: #{e.message} in #{self.data["layout"]}"
+          end
         end
+
 
         if layout = layouts[layout.data["layout"]]
           if used.include?(layout)
