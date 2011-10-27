@@ -43,7 +43,7 @@ module Jekyll
     #
     # Returns nothing.
     def transform
-      self.content = converter.convert(self.content)
+      self.output = converter.convert(self.content)
     end
 
     # Determine the extension depending on content_type.
@@ -82,9 +82,6 @@ module Jekyll
       end
 
       self.transform
-
-      # output keeps track of what will finally be written
-      self.output = self.content
 
       # recursively render layouts
       layout = layouts[self.data["layout"]]
