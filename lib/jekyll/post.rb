@@ -20,7 +20,7 @@ module Jekyll
 
     attr_accessor :site
     attr_accessor :data, :content, :output, :ext
-    attr_accessor :date, :slug, :published, :tags, :categories
+    attr_accessor :date, :slug, :title, :published, :tags, :categories, :comments
 
     # Initialize this Post instance.
     #   +site+ is the Site
@@ -38,6 +38,8 @@ module Jekyll
       self.process(name)
       self.read_yaml(@base, name)
 
+      self.title = self.data["title"] || self.slug.split('-').select {|w| w.capitalize! || w }.join(' ')
+
       #If we've added a date and time to the yaml, use that instead of the filename date
       #Means we'll sort correctly.
       if self.data.has_key?('date')
@@ -49,6 +51,12 @@ module Jekyll
         self.published = false
       else
         self.published = true
+      end
+
+      if self.data.has_key?('comments') && self.data['comments'] == true
+        self.comments = true
+      else
+        self.comments = false
       end
 
       self.tags = self.data.pluralized_array("tag", "tags")
@@ -217,11 +225,12 @@ module Jekyll
     # Returns <Hash>
     def to_liquid
       self.data.deep_merge({
-        "title"      => self.data["title"] || self.slug.split('-').select {|w| w.capitalize! || w }.join(' '),
+        "title"      => self.title,
         "url"        => self.url,
         "date"       => self.date,
         "id"         => self.id,
         "categories" => self.categories,
+        "comments"   => self.comments,
         "next"       => self.next,
         "previous"   => self.previous,
         "tags"       => self.tags,
