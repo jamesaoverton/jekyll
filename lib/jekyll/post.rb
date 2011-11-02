@@ -21,6 +21,8 @@ module Jekyll
     attr_accessor :site
     attr_accessor :data, :content, :output, :ext
     attr_accessor :date, :slug, :title, :published, :tags, :categories
+    attr_accessor :date, :slug, :title, :published, :tags, :categories, :comments
+
 
     # Initialize this Post instance.
     #   +site+ is the Site
@@ -51,6 +53,12 @@ module Jekyll
         self.published = false
       else
         self.published = true
+      end
+
+      if self.data.has_key?('comments') && self.data['comments'] == true
+        self.comments = true
+      else
+        self.comments = false
       end
 
       self.tags = self.data.pluralized_array("tag", "tags")
@@ -224,6 +232,7 @@ module Jekyll
         "date"       => self.date,
         "id"         => self.id,
         "categories" => self.categories,
+        "comments"   => self.comments,
         "next"       => self.next,
         "previous"   => self.previous,
         "tags"       => self.tags,
